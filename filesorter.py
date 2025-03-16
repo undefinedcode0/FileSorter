@@ -5,10 +5,88 @@ import cv2
 from PIL import Image
 from colorama import init, Fore, Style
 
-# Supported file extensions
-IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'}
-VIDEO_EXTENSIONS = {'.mp4', '.avi', '.mkv', '.mov', '.wmv'}
-AUDIO_EXTENSIONS = {'.mp3', '.wav', '.aac', '.flac', '.ogg'}
+IMAGE_EXTENSIONS = {
+    '.jpg', '.jpeg', '.jpe',
+    '.png',
+    '.gif',
+    '.bmp',
+    '.tiff', '.tif',
+    '.svg',
+    '.webp',
+    '.ico',
+    '.heic', '.heif',
+    '.raw', '.arw', '.cr2', '.nef', '.orf', '.dng', '.raf', '.rw2', '.pef', '.sr2',
+    '.jxr'  # JPEG XR
+}
+
+VIDEO_EXTENSIONS = {
+    '.mp4',
+    '.avi',
+    '.mkv',
+    '.mov',
+    '.wmv',
+    '.flv',
+    '.mpeg', '.mpg',
+    '.m4v',
+    '.3gp', '.3g2',
+    '.vob',
+    '.rm', '.rmvb',
+    '.m2ts', '.mts', '.ts',
+    '.webm',
+    '.divx',
+    '.xvid',
+    '.ogv'
+}
+
+AUDIO_EXTENSIONS = {
+    '.mp3',
+    '.wav',
+    '.aac',
+    '.flac',
+    '.ogg',
+    '.wma',
+    '.m4a',
+    '.opus',
+    '.aiff',
+    '.alac',
+    '.pcm',
+    '.amr',
+    '.ape',
+    '.mka',
+    '.ra',
+    '.wv',
+    '.mid', '.midi',
+    '.ac3'
+}
+
+MISCELLANEOUS_EXTENSIONS = {
+    # Documents
+    '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
+    '.odt', '.ods', '.odp', '.rtf', '.txt', '.tex',
+
+    # Archives / Compressed Files
+    '.zip', '.rar', '.7z', '.tar', '.gz', '.bz2', '.xz', '.iso', '.dmg',
+
+    # Executables / System Files
+    '.exe', '.msi', '.apk', '.bat', '.cmd', '.sh', '.bash', '.app', '.jar',
+
+    # Programming / Markup / Data Files
+    '.py', '.js', '.ts', '.html', '.htm', '.css', '.cpp', '.c', '.h', '.hpp',
+    '.java', '.rb', '.go', '.rs', '.php', '.pl', '.cs', '.swift', '.kt', '.m',
+    '.json', '.xml', '.yml', '.yaml', '.ini', '.cfg', '.conf',
+
+    # E-books
+    '.epub', '.mobi', '.azw', '.azw3',
+
+    # 3D Files
+    '.stl', '.obj', '.fbx', '.dae',
+
+    # Fonts
+    '.ttf', '.otf', '.woff', '.woff2',
+
+    # Others
+    '.log', '.csv', '.bak', '.db', '.sql', '.lnk', '.torrent'
+}
 
 
 def get_media_type(file_path: str) -> str:
@@ -20,6 +98,8 @@ def get_media_type(file_path: str) -> str:
         return "video"
     elif ext in AUDIO_EXTENSIONS:
         return "audio"
+    elif ext in MISCELLANEOUS_EXTENSIONS:
+        return "misc"
     else:
         return "other"
 
@@ -121,7 +201,7 @@ class FileOrganizer:
         """Sort files by resolution (only for images and videos)."""
         sorted_dict = {}
         for file in self.files:
-           media_type = get_media_type(file)
+            media_type = get_media_type(file)
             resolution = None
             if media_type == "image":
                 resolution = get_image_resolution(file)
@@ -159,6 +239,8 @@ class FileOrganizer:
                 media_folder = "videos"
             elif media_type == "audio":
                 media_folder = "audio"
+            elif media_type == "misc":
+                media_folder = "misc"
             else:
                 media_folder = "others"
             ext = os.path.splitext(file)[1].lower()
